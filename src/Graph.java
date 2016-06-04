@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
@@ -30,24 +31,49 @@ public class Graph extends HashMap<City, TreeSet<Road>> {
 		
 		return null;
 	}
-
-	/* Returns the city based on the from-value of r if it is not yet included in citiesIncluded.
-	 * If it is the city based on the to-value of r is returned of it is not yet included.
-	 * If both are included, null is returned.
+	
+	/* Print the MST based on the algorithm of Prim
 	 */
-	public City getNextCityIfNotIncluded(Road r, List<City> citiesIncluded) {
+	public void printMST(City root) {
+		//The given root object is most likely not in the graph, use findCity to get the corresponding object that is
+		root = findCity(root.getId());
+		
+		//list of nodes that are part of the MST, add the root node
+		List<City> citiesIncluded = new ArrayList<City>();
+		citiesIncluded.add(root);
+		
+		//Set of Roads that is connected to exactly one node included in citiesIncluded, sorted by time
+		TreeSet<Road> possibleRoads = new TreeSet<Road>();
+		possibleRoads.addAll(this.get(root));
+		
+
+		Road road;
 		City city;
-		
-		city = findCity(r.getFrom());
-		if (!citiesIncluded.contains(city)) {
-			return city;
+		int size = this.keySet().size();
+		while (citiesIncluded.size() < size) {
+			road = possibleRoads.first();
+			
+			//Get the node that is not part of the MST yet
+			city = findCity(road.getFrom());
+			if (citiesIncluded.contains(city)) city = findCity(road.getTo());
+			
+			/* update possibleRoads:
+			 * add all roads from city if they are not yet included
+			 * if they are, remove them instead since these roads now connect two cities that are already part of the MST (and thus would create a circle)
+			 */
+			for (Road r : this.get(city)) {
+				if (!possibleRoads.contains(r)) {
+					possibleRoads.add(r);
+				} else {
+					possibleRoads.remove(r);
+				}
+			}
+			
+			//add the node to the MST
+			citiesIncluded.add(city);
+			
+			//print out the edge along with the two nodes it connects
+			System.out.println(findCity(road.getFrom()).toString() + " - " + findCity(road.getTo()).toString());
 		}
-		
-		city = findCity(r.getTo());
-		if (!citiesIncluded.contains(city)) {
-			return city;
-		}
-		
-		return null;
 	}
 }
