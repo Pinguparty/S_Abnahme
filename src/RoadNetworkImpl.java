@@ -33,6 +33,10 @@ public class RoadNetworkImpl implements RoadNetwork {
 		graph.printMST(root);
 	}
 	
+	public void printAdj(City root) {
+		graph.printAdj(root);
+	}
+	
 	/* Reads the (text) file in the given path.
 	 * Next, the builder-object of type T creates a new Object of type T for each line in the text file and puts them in an ArrayList<T>.
 	 * May throw different FormatExceptions depending on the implementations of the T.build(String str) method.
