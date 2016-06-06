@@ -76,4 +76,19 @@ public class Graph extends HashMap<City, TreeSet<Road>> {
 			System.out.println(findCity(road.getFrom()).toString() + " - " + findCity(road.getTo()).toString());
 		}
 	}
+	public void printAdj(City root)
+	{
+		for(City c : keySet()){
+			System.out.print(c.toString() + ":	");
+			for(Road r: get(c)){
+				if (r.getFrom() == c.getId()){
+					System.out.print(findCity(r.getTo()).toString() + ", ");
+				}
+				else{
+					System.out.print(findCity(r.getFrom()).toString() + ", ");
+				}
+			}
+			System.out.println("");
+		}
+	}
 }
